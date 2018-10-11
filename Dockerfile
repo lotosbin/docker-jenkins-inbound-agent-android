@@ -24,7 +24,7 @@ RUN unzip /opt/$GRADLE_ZIP -d /opt/ && \
 # Install Android SDK
 RUN mkdir -p ${ANDROID_HOME} && \
     cd ${ANDROID_HOME} && \
-    wget -q ${ANDROID_SDK_ZIP_UR} -O android_tools.zip && \
+    wget -q ${ANDROID_SDK_ZIP_URL} -O android_tools.zip && \
     unzip android_tools.zip && \
     rm android_tools.zip
 # ADD $ANDROID_SDK_ZIP_URL /opt/
