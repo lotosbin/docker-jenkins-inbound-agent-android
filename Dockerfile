@@ -73,5 +73,7 @@ RUN mkdir /opt/android-ndk-tmp && \
    rm -rf /opt/android-ndk-tmp
 
 ENV PATH ${PATH}:${ANDROID_NDK_HOME}
+RUN echo "y" | android update sdk -u -a --filter android-28,build-tools-28.0.3
+RUN chown -R jenkins:jenkins $ANDROID_HOME
 
 USER jenkins
