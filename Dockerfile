@@ -5,8 +5,8 @@ USER root
 # Set desired Android Linux SDK version
 ENV ANDROID_SDK_VERSION 24.4.1
 
-ENV ANDROID_SDK_ZIP android-sdk_r$ANDROID_SDK_VERSION-linux.tgz
-ENV ANDROID_SDK_ZIP_URL https://dl.google.com/android/$ANDROID_SDK_ZIP
+ENV ANDROID_SDK_ZIP android_tools.zip
+ENV ANDROID_SDK_ZIP_URL https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip
 ENV ANDROID_HOME /opt/android-sdk-linux
 
 ENV GRADLE_ZIP gradle-3.0-bin.zip
@@ -22,31 +22,38 @@ RUN unzip /opt/$GRADLE_ZIP -d /opt/ && \
 	rm /opt/$GRADLE_ZIP
 
 # Install Android SDK
-ADD $ANDROID_SDK_ZIP_URL /opt/
-RUN tar xzvf /opt/$ANDROID_SDK_ZIP -C /opt/ && \
-	rm /opt/$ANDROID_SDK_ZIP
+RUN mkdir -p ${ANDROID_HOME} && \
+    cd ${ANDROID_HOME} && \
+    wget -q ${ANDROID_SDK_ZIP_UR} -O android_tools.zip && \
+    unzip android_tools.zip && \
+    rm android_tools.zip
+# ADD $ANDROID_SDK_ZIP_URL /opt/
+# RUN tar xzvf /opt/$ANDROID_SDK_ZIP -C /opt/ && \
+# 	rm /opt/$ANDROID_SDK_ZIP
+ENV PATH ${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools
 # Accept Licenses
-RUN mkdir -p $ANDROID_HOME/licenses/ && \
-    echo 8933bad161af4178b1185d1a37fbf41ea5269c55 >> $ANDROID_HOME/licenses/android-sdk-license && \
-    echo 84831b9409646a918e30573bab4c9c91346d8abd >> $ANDROID_HOME/licenses/android-sdk-preview-license && \
-    echo d975f751698a77b662f1254ddbeed3901e976f5a >> $ANDROID_HOME/licenses/intel-android-extra-license
+RUN yes | sdkmanager --licenses
+# RUN mkdir -p $ANDROID_HOME/licenses/ && \
+#     echo 8933bad161af4178b1185d1a37fbf41ea5269c55 >> $ANDROID_HOME/licenses/android-sdk-license && \
+#     echo 84831b9409646a918e30573bab4c9c91346d8abd >> $ANDROID_HOME/licenses/android-sdk-preview-license && \
+#     echo d975f751698a77b662f1254ddbeed3901e976f5a >> $ANDROID_HOME/licenses/intel-android-extra-license
 
 
 # Install required build-tools
-RUN	echo "y" | android update sdk -u -a --filter platform-tools,android-25,build-tools-25.0.2,extra-android-m2repository,extra-android-support,extra-google-m2repository
-RUN	echo "y" | android update sdk -u -a --filter platform-tools,android-26,build-tools-26.0.0
+# RUN	echo "y" | android update sdk -u -a --filter platform-tools,android-25,build-tools-25.0.2,extra-android-m2repository,extra-android-support,extra-google-m2repository
+# RUN	echo "y" | android update sdk -u -a --filter platform-tools,android-26,build-tools-26.0.0
 #RUN	echo "y" | android update sdk -u -a --filter platform-tools,android-23,build-tools-23.0.3 && \
 #	chmod -R 755 $ANDROID_HOME
 
 #RUN	echo "y" | android update sdk -u -a --filter platform-tools,android-24,build-tools-24.0.1 && \
 #	chmod -R 755 $ANDROID_HOME
 
-RUN	echo "y" | android update sdk -u -a --filter platform-tools,android-26,build-tools-26.0.2,extra-android-m2repository,extra-android-support,extra-google-m2repository
-RUN	echo "y" | android update sdk -u -a --filter build-tools-26.0.1
-RUN	echo "y" | android update sdk -u -a --filter android-23,build-tools-25.0.0
-RUN	echo "y" | android update sdk -u -a --filter android-21,android-22
-RUN	echo "y" | android update sdk -u -a --filter android-27,build-tools-27.0.3
-RUN	echo "y" | android update sdk -u -a --filter android-28,build-tools-28.0.2
+# RUN	echo "y" | android update sdk -u -a --filter platform-tools,android-26,build-tools-26.0.2,extra-android-m2repository,extra-android-support,extra-google-m2repository
+# RUN	echo "y" | android update sdk -u -a --filter build-tools-26.0.1
+# RUN	echo "y" | android update sdk -u -a --filter android-23,build-tools-25.0.0
+# RUN	echo "y" | android update sdk -u -a --filter android-21,android-22
+# RUN	echo "y" | android update sdk -u -a --filter android-27,build-tools-27.0.3
+# RUN	echo "y" | android update sdk -u -a --filter android-28,build-tools-28.0.2
 
 # Install 32-bit compatibility for 64-bit environments
 #RUN apt-get install libc6:i386 libncurses5:i386 libstdc++6:i386 zlib1g:i386 -y
@@ -57,7 +64,7 @@ RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 
 # fix permission issue
-# RUN chown -R jenkins:jenkins $ANDROID_HOME
+RUN chown -R jenkins:jenkins $ANDROID_HOME
 
 
 
@@ -73,7 +80,7 @@ RUN mkdir /opt/android-ndk-tmp && \
    rm -rf /opt/android-ndk-tmp
 
 ENV PATH ${PATH}:${ANDROID_NDK_HOME}
-RUN echo "y" | android update sdk -u -a --filter android-28,build-tools-28.0.3
-RUN chown -R jenkins:jenkins $ANDROID_HOME
+# RUN echo "y" | android update sdk -u -a --filter android-28,build-tools-28.0.3
+# RUN chown -R jenkins:jenkins $ANDROID_HOME
 
 USER jenkins
