@@ -15,15 +15,18 @@ RUN unzip $HOME/$GRADLE_ZIP -d $HOME/ && \
 ENV PATH $PATH:$HOME/gradle-3.0/bin
 
 # Install Android SDK
-ENV ANDROID_SDK_ZIP android_tools.zip
 ENV ANDROID_SDK_ZIP_URL https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip
+ENV ANDROID_SDK_ZIP sdk-tools-linux-4333796
 ENV ANDROID_HOME $HOME/android-sdk-linux
-RUN mkdir -p ${ANDROID_HOME} && \
-    cd ${ANDROID_HOME} && \
-    wget -q ${ANDROID_SDK_ZIP_URL} -O android_tools.zip && \
-    unzip android_tools.zip && \
-    rm android_tools.zip
-# ADD $ANDROID_SDK_ZIP_URL /opt/
+# RUN mkdir -p ${ANDROID_HOME} && \
+#     cd ${ANDROID_HOME} && \
+#     wget -q ${ANDROID_SDK_ZIP_URL} -O android_tools.zip && \
+#     unzip android_tools.zip && \
+#     rm android_tools.zip
+ADD ${ANDROID_SDK_ZIP_URL} $HOME
+RUN cd $HOME && \
+    unzip ${ANDROID_SDK_ZIP} && \
+    rm ${ANDROID_SDK_ZIP}
 # RUN tar xzvf /opt/$ANDROID_SDK_ZIP -C /opt/ && \
 # 	rm /opt/$ANDROID_SDK_ZIP
 ENV PATH ${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools
