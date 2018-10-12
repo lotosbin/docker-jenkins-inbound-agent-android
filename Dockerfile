@@ -4,25 +4,20 @@ LABEL MAINTAINER="liubinbin <lotosbin@gmail.com>"
 USER jenkins
 
 # Set desired Android Linux SDK version
-ENV ANDROID_SDK_VERSION 24.4.1
-
-ENV ANDROID_SDK_ZIP android_tools.zip
-ENV ANDROID_SDK_ZIP_URL https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip
-ENV ANDROID_HOME $HOME/android-sdk-linux
-
 ENV GRADLE_ZIP gradle-3.0-bin.zip
 ENV GRADLE_ZIP_URL https://services.gradle.org/distributions/$GRADLE_ZIP
 
-ENV PATH $PATH:$ANDROID_HOME/tools
-ENV PATH $PATH:$ANDROID_HOME/platform-tools
-ENV PATH $PATH:$HOME/gradle-3.0/bin
 
 # Install gradle
 ADD $GRADLE_ZIP_URL $HOME/
 RUN unzip $HOME/$GRADLE_ZIP -d $HOME/ && \
 	rm $HOME/$GRADLE_ZIP
+ENV PATH $PATH:$HOME/gradle-3.0/bin
 
 # Install Android SDK
+ENV ANDROID_SDK_ZIP android_tools.zip
+ENV ANDROID_SDK_ZIP_URL https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip
+ENV ANDROID_HOME $HOME/android-sdk-linux
 RUN mkdir -p ${ANDROID_HOME} && \
     cd ${ANDROID_HOME} && \
     wget -q ${ANDROID_SDK_ZIP_URL} -O android_tools.zip && \
