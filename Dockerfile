@@ -64,6 +64,7 @@ RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 
 # fix permission issue
+RUN chmod -R a+w $ANDROID_HOME
 RUN chown -R jenkins:jenkins $ANDROID_HOME
 
 
