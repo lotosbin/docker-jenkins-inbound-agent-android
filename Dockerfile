@@ -42,3 +42,6 @@ RUN cd $HOME && \
    wget -q https://dl.google.com/android/repository/${ANDROID_NDK_ZIP} && \
    unzip -q ${ANDROID_NDK_ZIP} && \
    rm -rf $HOME/${ANDROID_NDK_ZIP}
+   
+RUN echo "y" | android update sdk -u -a --filter platforms;android-28
+RUN echo "y" | android update sdk -u -a --filter build-tools;28.0.3
