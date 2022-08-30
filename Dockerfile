@@ -1,4 +1,4 @@
-FROM jenkins/jnlp-slave:3.26-1
+FROM jenkins/jnlp-slave:4.13.2-1-jdk11
 LABEL MAINTAINER="liubinbin <lotosbin@gmail.com>"
 
 USER jenkins
